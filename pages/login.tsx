@@ -1,39 +1,44 @@
-import InputGroup from '@/components/InputGroup'
-import axios from 'axios';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { FormEvent, useState } from 'react'
+import InputGroup from "@/components/InputGroup";
+import { useAuthDispatch } from "@/context/auth";
+import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { FormEvent, useState } from "react";
 
 const login = () => {
-    const [password, setPassword] = useState("");
-    const [username, setUsername] = useState("");
-    const [errors, setErrors] = useState<any>({});
-  
-    const router = useRouter();
-  
-    const handleSubmit = async (e: FormEvent) => {
-      e.preventDefault();
-      try {
-        const res = await axios.post("/auth/login", {
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [errors, setErrors] = useState<any>({});
+
+  const router = useRouter();
+
+  const dispatch = useAuthDispatch();
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        "/auth/login",
+        {
           password,
           username,
-        }, {withCredentials: true});
-        console.log("res", res);
-        router.push("/");
-      } catch (error: any) {
-        console.log("error:", error);
-        setErrors(error?.response?.data || {})
-      }
-  
-    };
-  
+        },
+        { withCredentials: true }
+      );
+      dispatch("LOGIN", res.data?.user);
+      router.push("/");
+    } catch (error: any) {
+      console.log("error:", error);
+      setErrors(error?.response?.data || {});
+    }
+  };
+
   return (
     <div className="bg-white">
       <div className="flex flex-col items-center justify-content h-screen p-6">
         <div className="w-10/12 mx-auto md:w-96">
           <h1 className="mb-2 text-lg font-medium">SIGN IN</h1>
           <form onSubmit={handleSubmit}>
-
             <InputGroup
               placeholder="Username"
               value={username}
@@ -62,7 +67,7 @@ const login = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default login
+export default login;
