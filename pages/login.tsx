@@ -17,9 +17,9 @@ const login = () => {
         const res = await axios.post("/auth/login", {
           password,
           username,
-        });
+        }, {withCredentials: true});
         console.log("res", res);
-
+        router.push("/");
       } catch (error: any) {
         console.log("error:", error);
         setErrors(error?.response?.data || {})
