@@ -1,4 +1,5 @@
 import InputGroup from "@/components/InputGroup";
+import { useAuthState } from "@/context/auth";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -12,6 +13,11 @@ const Register = () => {
 
   const router = useRouter();
 
+
+  const { authenticated } = useAuthState();
+
+  if (authenticated) router.push("/");
+  
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {

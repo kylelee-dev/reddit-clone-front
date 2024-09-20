@@ -1,5 +1,6 @@
 import InputGroup from "@/components/InputGroup";
 import axios from "axios";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { FormEvent, useState } from "react";
 
@@ -14,12 +15,16 @@ const SubCreate = () => {
     event.preventDefault();
 
     try {
-      const res = await axios.post("/subs", { name, title, description });
+      const res = await axios.post("/subs/create", {
+        name,
+        title,
+        description,
+      });
 
       router.push(`/r/${res.data.name}`);
     } catch (error: any) {
       console.log(error);
-      setErrors(error.res.data);
+      setErrors(error?.res?.data || {});
     }
   };
   return (
@@ -79,3 +84,15 @@ const SubCreate = () => {
 };
 
 export default SubCreate;
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  try {
+    const cookie = req.headers.cookie;
+    if (!cookie) throw new Error("Missing auth token cookie.");
+    await axios.get("/auth/me", { headers: { cookie } });
+    
+  } catch (error) {
+    res.writeHead(307, { Location: "/login" }).end();
+  }
+  return { props: {} };
+};
