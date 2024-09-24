@@ -1,9 +1,13 @@
+import { useAuthState } from "@/context/auth";
 import { Sub } from "@/types";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import useSWR from "swr";
 export default function Home() {
+
+  const {authenticated} = useAuthState();
+
   const fetcher = async (url: string) => {
     return await axios.get(url).then((res) => res.data);
   };
@@ -42,7 +46,8 @@ export default function Home() {
                 <p className="ml-auto font-medium">{sub.postCount}</p>
               </div>
             ))}
-          </div>
+          </div>{
+            authenticated &&
           <div className="w-full py-6 text-center">
             <Link href="/subs/create" legacyBehavior>
               <a className="w-full p-2 text-center text-white bg-gray-400 rounded">
@@ -50,6 +55,7 @@ export default function Home() {
               </a>
             </Link>
           </div>
+}
         </div>
       </div>
     </div>
