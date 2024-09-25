@@ -1,3 +1,4 @@
+import Sidebar from "@/components/Sidebar";
 import { useAuthState } from "@/context/auth";
 import axios from "axios";
 import Image from "next/image";
@@ -53,7 +54,6 @@ const SubPage = () => {
       fileInput.click();
     }
   };
-  console.log(sub);
   return (
     <>
       {sub && (
@@ -110,7 +110,10 @@ const SubPage = () => {
             </div>
           </div>
           {/* Post and Sidebar */}
-          <div></div>
+          <div className="flex max-w-5xl px-4 pt-5 mx-auto">
+            <div className="w-full md:mr-3 md:w-8/12"></div>
+            <Sidebar sub={sub} />
+          </div>
         </>
       )}
     </>
