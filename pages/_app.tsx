@@ -14,12 +14,10 @@ export default function App({ Component, pageProps }: AppProps) {
   const authRoute = authRoutes.includes(pathname);
 
   return (
-    <>
     <AuthProvider>
       {!authRoute && <Navbar />}
       <div className={authRoute ? "" : "pt-16"}></div>
       <Component {...pageProps} />
     </AuthProvider>
-    </>
   );
 }

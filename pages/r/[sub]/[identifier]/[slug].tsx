@@ -1,9 +1,10 @@
+import { useAuthState } from "@/context/auth";
 import { Post } from "@/types";
 import axios from "axios";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { FormEvent, useState } from "react";
 import { FaCommentAlt } from "react-icons/fa";
 import useSWR from "swr";
 
@@ -24,7 +25,23 @@ const PostPage = () => {
     identifier && slug ? `/posts/${identifier}/${slug}` : null,
     fetcher
   );
+  const { authenticated, user } = useAuthState();
+  const [newComment, setNewComment] = useState("");
 
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if (newComment.trim() === "") return;
+
+    try {
+      await axios.post(`/posts/${post?.identifier}/${post?.slug}/comment`, {
+        body: newComment,
+      });
+      setNewComment("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="flex max-w-5xl px-4 pt-5 mx-auto">
       <div className="w-full md:mr-3 md:w-8/12">
@@ -57,6 +74,50 @@ const PostPage = () => {
                     </button>
                   </div>
                 </div>
+              </div>
+              {/* Post Comments */}
+              <div className=" pr-6 mb-4">
+                {authenticated ? (
+                  <div>
+                    <p className="mb-1 text-xs">
+                      Leave a comment as
+                      <Link href={`/u/${user?.username}`} legacyBehavior>
+                        <a className="ml-2 font-semibold text-blue-500">
+                          {user?.username}
+                        </a>
+                      </Link>
+                    </p>
+                    <form onSubmit={handleSubmit}>
+                      <textarea
+                        className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-gray-600"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                      ></textarea>
+                      <div className="flex justify-end">
+                        <button
+                          type="submit"
+                          disabled={newComment.trim() === ""}
+                          className="px-3 py-1 text-white bg-gray-400 rounded"
+                        >
+                          Comment
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between px-2 py-4 border border-gray-200 rounded">
+                    <p className="font-semibold text-gray-400">
+                      Sign in to leave a comment.
+                    </p>
+                    <div className="">
+                      <Link href={"/login"} legacyBehavior>
+                        <a className="px-3 py-1 text-white bg-gray-400 rounded">
+                          Login
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </div>
             </>
           )}
