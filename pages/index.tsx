@@ -42,7 +42,7 @@ export default function Home() {
                 </Link>
                 <Link href={`/r/${sub.name}`} legacyBehavior>
                   <a className="ml-2 font-bold hover:cursor-pointer">
-                    /r/${sub.name}
+                    /r/{sub.name}
                   </a>
                 </Link>
                 <p className="ml-auto font-medium">{sub.postCount}</p>
