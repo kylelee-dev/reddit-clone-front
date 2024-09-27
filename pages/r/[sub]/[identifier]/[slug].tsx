@@ -8,6 +8,7 @@ import React, { FormEvent, useState } from "react";
 import { FaCommentAlt } from "react-icons/fa";
 import useSWR from "swr";
 import { Comment } from "@/types";
+import { FaArrowDownLong, FaArrowUpLong } from "react-icons/fa6";
 
 const PostPage = () => {
   const router = useRouter();
@@ -48,6 +49,7 @@ const PostPage = () => {
       console.log(error);
     }
   };
+  const vote = () => {};
   return (
     <div className="flex max-w-5xl px-4 pt-5 mx-auto">
       <div className="w-full md:mr-3 md:w-8/12">
@@ -55,6 +57,29 @@ const PostPage = () => {
           {post && (
             <>
               <div className="flex">
+                {/* Upvote & Downvote */}
+                <div className="flex-shrink-0 w-10 py-2 text-center rounded-l">
+                  {/* Upvote */}
+                  <div
+                    className="flex justify-center w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
+                    onClick={vote}
+                  >
+                    <FaArrowUpLong
+                      className={post.userVote === 1 ? "text-red-500" : ""}
+                    />
+                  </div>
+                  <p className="text-sm font-bold">{post.voteScore}</p>
+                  {/* Down */}
+                  <div
+                    className="flex justify-center w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-500"
+                    onClick={vote}
+                  >
+                    <FaArrowDownLong
+                      className={post.userVote === -1 ? "text-blue-500" : ""}
+                    />
+                  </div>
+                </div>
+
                 <div className="py-2 pr-2">
                   <div className="flex items-center">
                     <p className="text-xs text-gray-400">
@@ -128,6 +153,30 @@ const PostPage = () => {
               {/* Comments Render*/}
               {comments?.map((comment) => (
                 <div className="flex" key={comment.identifier}>
+                  {/* Upvote & Downvote */}
+                  <div className="flex-shrink-0 w-10 py-2 text-center rounded-l">
+                    {/* Upvote */}
+                    <div
+                      className="flex justify-center w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
+                      onClick={vote}
+                    >
+                      <FaArrowUpLong
+                        className={comment.userVote === 1 ? "text-red-500" : ""}
+                      />
+                    </div>
+                    <p className="text-sm font-bold">{comment.voteScore}</p>
+                    {/* Down */}
+                    <div
+                      className="flex justify-center w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-500"
+                      onClick={vote}
+                    >
+                      <FaArrowDownLong
+                        className={
+                          comment.userVote === -1 ? "text-blue-500" : ""
+                        }
+                      />
+                    </div>
+                  </div>
                   <div className="py-2 pr-2">
                     <p className="mb-1 text-xs leading-none">
                       <Link href={`/u/${comment.username}`} legacyBehavior>
