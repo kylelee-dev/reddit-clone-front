@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import React, { FormEvent, useState } from "react";
 import { FaCommentAlt } from "react-icons/fa";
 import useSWR from "swr";
+import { Comment } from "@/types";
 
 const PostPage = () => {
   const router = useRouter();
@@ -25,9 +26,12 @@ const PostPage = () => {
     identifier && slug ? `/posts/${identifier}/${slug}` : null,
     fetcher
   );
+  const { data: comments } = useSWR<Comment[]>(
+    identifier && slug ? `/posts/${identifier}/${slug}/comments` : null,
+    fetcher
+  );
   const { authenticated, user } = useAuthState();
   const [newComment, setNewComment] = useState("");
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -119,6 +123,26 @@ const PostPage = () => {
                   </div>
                 )}
               </div>
+              {/* Comments Render*/}
+              {comments?.map((comment) => (
+                <div className="flex" key={comment.identifier}>
+                  <div className="py-2 pr-2">
+                    <p className="mb-1 text-xs leading-none">
+                      <Link href={`/u/${comment.username}`} legacyBehavior>
+                        <a className="mr-1 font-bold hover:underline">
+                          {comment.username}
+                        </a>
+                      </Link>
+                      <span className="text-gray-600">{`${
+                        comment.voteScore
+                      } posts ${dayjs(comment.createdAt).format(
+                        "YYYY-MM-DD HH:mm"
+                      )}`}</span>
+                    </p>
+                    <p>{comment.body}</p>
+                  </div>
+                </div>
+              ))}
             </>
           )}
         </div>
