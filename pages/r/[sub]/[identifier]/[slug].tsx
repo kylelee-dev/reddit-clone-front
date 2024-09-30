@@ -49,7 +49,27 @@ const PostPage = () => {
       console.log(error);
     }
   };
-  const vote = () => {};
+  const vote = async (value: number, comment?: Comment) => {
+    if (!authenticated) router.push("/login");
+
+    if (
+      (!comment && value === post?.userVote) ||
+      (comment && comment.userVote === value)
+    ) {
+      value = 0;
+    }
+
+    try {
+      await axios.post("/votes", {
+        identifier,
+        slug,
+        commentIdentifier: comment?.identifier,
+        value,
+      });
+    } catch (error) {
+        console.log(error)
+    }
+  };
   return (
     <div className="flex max-w-5xl px-4 pt-5 mx-auto">
       <div className="w-full md:mr-3 md:w-8/12">
