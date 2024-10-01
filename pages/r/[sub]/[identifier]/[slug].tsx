@@ -82,7 +82,7 @@ const PostPage = () => {
                   {/* Upvote */}
                   <div
                     className="flex justify-center w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
-                    onClick={vote}
+                    onClick={() => vote(1)}
                   >
                     <FaArrowUpLong
                       className={post.userVote === 1 ? "text-red-500" : ""}
@@ -92,7 +92,7 @@ const PostPage = () => {
                   {/* Down */}
                   <div
                     className="flex justify-center w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-500"
-                    onClick={vote}
+                    onClick={() => vote(-1)}
                   >
                     <FaArrowDownLong
                       className={post.userVote === -1 ? "text-blue-500" : ""}
@@ -178,7 +178,7 @@ const PostPage = () => {
                     {/* Upvote */}
                     <div
                       className="flex justify-center w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
-                      onClick={vote}
+                      onClick={() =>vote(1, comment)}
                     >
                       <FaArrowUpLong
                         className={comment.userVote === 1 ? "text-red-500" : ""}
@@ -188,7 +188,7 @@ const PostPage = () => {
                     {/* Down */}
                     <div
                       className="flex justify-center w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-500"
-                      onClick={vote}
+                      onClick={() =>vote(-1, comment)}
                     >
                       <FaArrowDownLong
                         className={
