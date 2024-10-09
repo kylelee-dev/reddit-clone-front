@@ -1,5 +1,7 @@
+import PostCard from "@/components/PostCard";
 import Sidebar from "@/components/Sidebar";
 import { useAuthState } from "@/context/auth";
+import { Post } from "@/types";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -21,7 +23,7 @@ const SubPage = () => {
   const router = useRouter();
   const subName = router.query.sub;
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { data: sub, error } = useSWR(
+  const { data: sub, error, mutate: subMutate } = useSWR(
     subName ? `/subs/${subName}` : null,
     fetcher
   );
@@ -54,6 +56,16 @@ const SubPage = () => {
       fileInput.click();
     }
   };
+
+  let renderPosts;
+
+  if(!sub) {
+    renderPosts = <p className="text-lg text-center">Loading...</p>
+  } else if (sub.posts.length === 0) {
+    renderPosts = <p className="text-lg text-center">There is no post available...</p>
+  } else {
+    renderPosts = sub.posts.map((post: Post) => (<PostCard  key={post.identifier} post={post} subMutate={subMutate}/>))
+  }
   return (
     <>
       {sub && (
@@ -111,7 +123,7 @@ const SubPage = () => {
           </div>
           {/* Post and Sidebar */}
           <div className="flex max-w-5xl px-4 pt-5 mx-auto">
-            <div className="w-full md:mr-3 md:w-8/12"></div>
+            <div className="w-full md:mr-3 md:w-8/12">{renderPosts}</div>
             <Sidebar sub={sub} />
           </div>
         </>
