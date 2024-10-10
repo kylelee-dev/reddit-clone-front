@@ -31,6 +31,7 @@ const PostCard = ({
   subMutate
 }: PostCardProps) => {
   const router = useRouter();
+  const isInSubPage = router.pathname === "/r/[sub]";
   const { authenticated } = useAuthState();
   const vote = async (value: number) => {
     if (!authenticated) router.push("/login");
@@ -67,7 +68,7 @@ const PostCard = ({
       {/* Post Data */}
       <div className="w-full p-2">
         <div className="flex items-center">
-          {/* {!isInSubPage && (
+          {!isInSubPage && (
             <>
               <Link href={`/r/${subName}`} legacyBehavior>
                 <a>
@@ -87,7 +88,7 @@ const PostCard = ({
               </Link>
               <span className="mx-1 text-sm text-gray-400">*</span>
             </>
-          )} */}
+          )}
         </div>
         <p className="text-sm text-gray-400">
           Posted by
