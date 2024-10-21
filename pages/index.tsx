@@ -4,6 +4,7 @@ import { Post, Sub } from "@/types";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 export default function Home() {
@@ -30,13 +31,45 @@ export default function Home() {
   const isInitialLoading = !data && !error;
   const posts: Post[] = data ? ([] as Post[]).concat(...data) : [];
   const { data: topSubs } = useSWR<Sub[]>(address, fetcher);
+
+  const [observedPost, setObservedPost] = useState("");
+
+  useEffect(() => {
+    if (!posts || posts.length === 0) return;
+
+    const id = posts[posts.length - 1].identifier;
+    // If posts are added to the list,
+    // set the last of the added posts as a new observedPost
+    if (id !== observedPost) {
+      setObservedPost(id);
+      observeElement(document.getElementById(id));
+    }
+  }, [posts]);
+
+  const observeElement = (element: HTMLElement | null) => {
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting === true) {
+          console.log("Reached the last post");
+          setPage(page + 1);
+          observer.unobserve(element);
+        }
+      },
+      { threshold: 1 }
+    );
+
+    observer.observe(element);
+  };
+
   return (
     <div className="flex max-w-5xl px-4 pt-5 mx-auto">
       {/* Post List */}
       <div className="w-full md:mr-3 md:w-8/12">
         {isInitialLoading && <p className="text-lg text-center">Loading..</p>}
-        {posts?.map(post => (<PostCard key={post.identifier}
-        post={post} />))}
+        {posts?.map((post) => (
+          <PostCard key={post.identifier} post={post} />
+        ))}
       </div>
       {/* Sidebar */}
       <div className="hidden w-4/12 ml-3 md:block">
