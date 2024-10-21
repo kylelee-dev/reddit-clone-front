@@ -68,7 +68,7 @@ export default function Home() {
       <div className="w-full md:mr-3 md:w-8/12">
         {isInitialLoading && <p className="text-lg text-center">Loading..</p>}
         {posts?.map((post) => (
-          <PostCard key={post.identifier} post={post} />
+          <PostCard key={post.identifier} post={post} mutate={mutate} />
         ))}
       </div>
       {/* Sidebar */}
