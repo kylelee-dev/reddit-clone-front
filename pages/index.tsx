@@ -1,9 +1,11 @@
+import PostCard from "@/components/PostCard";
 import { useAuthState } from "@/context/auth";
-import { Sub } from "@/types";
+import { Post, Sub } from "@/types";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
 export default function Home() {
   const { authenticated } = useAuthState();
 
@@ -11,11 +13,31 @@ export default function Home() {
     return await axios.get(url).then((res) => res.data);
   };
   const address = "http://localhost:4000/api/subs/sub/topSubs";
+
+  const getKey = (pageIndex: number, previousPageData: Post[]) => {
+    if (previousPageData && !previousPageData.length) return null;
+    return `/posts?page=${pageIndex}`;
+  };
+
+  const {
+    data,
+    error,
+    size: page,
+    setSize: setPage,
+    isValidating,
+    mutate,
+  } = useSWRInfinite<Post[]>(getKey, fetcher);
+  const isInitialLoading = !data && !error;
+  const posts: Post[] = data ? ([] as Post[]).concat(...data) : [];
   const { data: topSubs } = useSWR<Sub[]>(address, fetcher);
   return (
     <div className="flex max-w-5xl px-4 pt-5 mx-auto">
       {/* Post List */}
-      <div className="w-full md:mr-3 md:w-8/12"></div>
+      <div className="w-full md:mr-3 md:w-8/12">
+        {isInitialLoading && <p className="text-lg text-center">Loading..</p>}
+        {posts?.map(post => (<PostCard key={post.identifier}
+        post={post} />))}
+      </div>
       {/* Sidebar */}
       <div className="hidden w-4/12 ml-3 md:block">
         <div className="bg-white border rounded">
