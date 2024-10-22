@@ -2,6 +2,7 @@ import { useAuthDispatch, useAuthState } from "@/context/auth";
 import axios from "axios";
 import Link from "next/link";
 import React from "react";
+import { FaSearch } from "react-icons/fa";
 
 const Navbar: React.FC = () => {
   const { loading, authenticated } = useAuthState();
@@ -24,10 +25,11 @@ const Navbar: React.FC = () => {
       </span>
       <div className="max-w-full px-4">
         <div className="relative flex items-center bg-gray-100 border rounded hover:border-gray-700 hover:bg-white">
+          <FaSearch  className="ml-2 text-gray-400"/>
           <input
             type="text"
             placeholder="Search..."
-            className="px-3 py-1  bg-transparent rounded focus:outline-none "
+            className="px-3 py-1 h-7 bg-transparent rounded focus:outline-none "
           />
         </div>
       </div>
@@ -35,7 +37,7 @@ const Navbar: React.FC = () => {
         {!loading &&
           (authenticated ? (
             <button
-              className="w-20 p-2 mr-2 text-center text-white bg-gray-400 rounded"
+              className="w-20 px-2 mr-2 text-center text-white h-7 text-sm bg-gray-400 rounded"
               onClick={handleLogout}
             >
               LOGOUT
@@ -43,12 +45,12 @@ const Navbar: React.FC = () => {
           ) : (
             <>
               <Link href={"/login"} legacyBehavior>
-                <a className="w-20 p-2 mr-2 text-center text-blue-500 border border-blue-500 rounded">
+                <a className="w-20 px-2 pt-1 mr-2 text-center h-7 text-sm text-blue-500 border border-blue-500 rounded">
                   LOGIN
                 </a>
               </Link>
               <Link href={"/register"} legacyBehavior>
-                <a className="w-20 p-2 text-center text-white bg-gray-400 rounded">
+                <a className="w-20 px-2 pt-1 text-center text-white h-7 text-sm bg-gray-400 rounded">
                   SIGNUP
                 </a>
               </Link>

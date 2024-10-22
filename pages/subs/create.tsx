@@ -29,7 +29,7 @@ const SubCreate = () => {
   };
   return (
     <div className="flex flex-col justify-center pt-16">
-      <div className="w-10/12 mx-auto md:w-96">
+      <div className="w-10/12 mx-auto md:w-96 bg-white rounded px-8 py-6">
         <h1 className="mb-2 text-lg font-medium">Create Sub</h1>
         <hr />
         <form onSubmit={handleSubmit}>

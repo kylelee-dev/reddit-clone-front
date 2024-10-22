@@ -51,7 +51,7 @@ const PostCard = ({
   return (
     <div className="flex mb-4 bg-white rounded" id={identifier}>
       {/* Upvote & Downvote */}
-      <div className="flex-shrink-0 w-10 py-2 text-center rounded-l">
+      <div className="flex-shrink-0 w-10 py-2 text-center rounded-l my-auto">
         {/* Upvote */}
         <div
           className="flex justify-center w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
@@ -71,6 +71,7 @@ const PostCard = ({
       {/* Post Data */}
       <div className="w-full p-2">
         <div className="flex items-center">
+          <div className="flex items-center">
           {!isInSubPage && (
             <>
               <Link href={`/r/${subName}`} legacyBehavior>
@@ -95,7 +96,7 @@ const PostCard = ({
         </div>
         <p className="text-sm text-gray-400">
           Posted by
-          <Link href={`/r/${username}`} legacyBehavior>
+          <Link href={`/u/${username}`} legacyBehavior>
             <a className="mx-1 hover:underline">/u/{username}</a>
           </Link>
           <Link href={url} legacyBehavior>
@@ -104,6 +105,7 @@ const PostCard = ({
             </a>
           </Link>
         </p>
+        </div>
         <Link href={url} legacyBehavior>
           <a className="my-1 text-lg font-medium"> {title}</a>
         </Link>
