@@ -13,11 +13,10 @@ const Register = () => {
 
   const router = useRouter();
 
-
   const { authenticated } = useAuthState();
 
   if (authenticated) router.push("/");
-  
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
@@ -27,12 +26,11 @@ const Register = () => {
         username,
       });
       console.log("res", res);
-       router.push("/login");
+      router.push("/login");
     } catch (error: any) {
       console.log("error:", error);
-      setErrors(error?.response?.data || {})
+      setErrors(error?.response?.data || {});
     }
-
   };
 
   return (
@@ -56,6 +54,7 @@ const Register = () => {
             />
             <InputGroup
               placeholder="Password"
+              type="password"
               value={password}
               setValue={setPassword}
               error={errors.password}
